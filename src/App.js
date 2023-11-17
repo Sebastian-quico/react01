@@ -1,11 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
 import AppLista from './protegido/AppLista';
-
+//<div style={{background:"violet", width:"350px", padding:"10px"}}>//
 function App() {
   return (
-    
-    <div style={{background:"violet", width:"350px", padding:"10px"}}>
+      <div style={{background:"violet", width:"370px", padding:"15px"}}>
       <h1>App.js</h1>
       <AppLista/>
     </div>

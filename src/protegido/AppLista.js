@@ -1,50 +1,56 @@
-import AppForm from './AppForm'
-
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import AppForm from './AppForm';
-import { collection, deleteDoc, doc, onSnapshot, query } from 'firebase/firestore';
-import{db} from '../conexion/firebase';
+import { collection, deleteDoc, onSnapshot, query } from 'firebase/firestore';
+import { db } from '../conexion/firebase';
 
-const AppLista = (props) =>  { 
 
-  const [docBD, setDocDB] = useState([]);
-  const finRead = () => {
-    const xColeccionConQuery = query (collection(db, 'persona'));
-    const unsubcribe =  onSnapshot(xColeccionConQuery,(xDatosBD)  => {
+const AppLista = (props) => { 
+////////////////////
+  const [docBD, setDocBD] = useState([]);
+  const fnRead = () => {
+    const xColeccionConQuery = query(collection(db, 'persona'));
+    const unsubcribe = onSnapshot(xColeccionConQuery,(xDatosBD) => {
       const xDoc = [];
       xDatosBD.forEach((doc) => {
         xDoc.push({id:doc.id, ...doc.data()});
-      });
-      setDocDB(xDoc);
+      }); 
+      setDocBD(xDoc);
     });
- }
-
-useEffect (()=>{ finRead();  },[props.idActual] );
-
-const [idActual, setIdActual] = useState("");
-const fnDelete = async (xId) => {
-  if (window.confirm("confirme para eliminar")) {
-    await deleteDoc(doc(db, "persona",xId));
+    
   }
-  alert("Se elimino con exito...");
-}
+
+  useEffect(() => { fnRead(); }, [props. idActual]);
+  console.log(docBD);
+
+  //////DELETE////////
+
+  const [idActual, setIdActual] = useState("");
+  const fnDelete = async (xId) => {
+    alert("Se elimino con exito ...");
+  }
+
 
   return (
     <div style={{background:"greenyellow", padding:"15px"}}>
-      <h1>AppList.js </h1>
-      <AppForm {...{idActual, setIdActual}} /> {/*envio de las variables*/}
+      <h1>AppList.js</h1>
+      <AppForm {...{idActual, setIdActual}} />
       <h3>Lista de clientes</h3>
       {
-        docBD.map((row, index) =>
+        docBD.map((row, index) => 
         <p key={row.id}>
-          No. {index +1}. {row.nombre}
+          No. {index + 1}. {row.nombre} 
+          ..... 
+          <span onClick={()=> fnDelete(row.id)}>X</span> 
           .....
-          <span onClick={() => fnDelete(row.id)}>x</span>
-          .....
-          <span onClick={() => setIdActual(row.id)}>A</span>
-        </p>
-        )
+          <span onClick={()=> setIdActual(row.id)}>A</span>
+          A
+        </p>)
       }
+      <p>No. 1. Juan Manuel Ticona Vega ..... X ..... A</p>
+      <p>No. 2. Rosa Maria Luque Conde ..... X ..... A</p>
+      <p>No. 3. Joe Ricardo Lopez Moral ..... X ..... A</p>
+
+
     </div>
   )
 }
